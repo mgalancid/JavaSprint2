@@ -7,8 +7,7 @@ import java.util.Optional;
 
 
 public interface UserEntityRepository extends JpaRepository<UserEntity, Long> {
-    // Query methods
-   UserEntity findbyID(Long id);
-   UserEntity existsbyId(Long id);
-   UserEntity countBy(Long Id);
+    boolean existsByUser(String username);
+    boolean existByEmail(String email);
+    int countByEmail(String email);
 }
