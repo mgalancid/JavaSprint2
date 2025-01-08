@@ -12,6 +12,7 @@ public class UserEntity {
     private Long id;
     private String username;
     private String password;
+    private String email;
 
     public UserEntity() { // Hibernate
 
@@ -22,8 +23,6 @@ public class UserEntity {
         this.password = password;
         this.email = email;
     }
-
-    private String email;
 
     @OneToMany(mappedBy = "user")
     private Set<TaskEntity> task = new HashSet<>();
