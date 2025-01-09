@@ -10,6 +10,16 @@ public class TaskEntity {
     private TaskStatus status;
     private String title, description;
 
+    public TaskEntity() {
+
+    }
+
+    public TaskEntity(TaskStatus status, String title, String description) {
+        this.status = status;
+        this.title = title;
+        this.description = description;
+    }
+
     @ManyToOne
     private UserEntity user;
 
