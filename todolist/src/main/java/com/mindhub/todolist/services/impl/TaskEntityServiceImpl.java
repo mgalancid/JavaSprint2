@@ -28,7 +28,7 @@ public class TaskEntityServiceImpl implements TaskEntityService {
     }
 
     @Override
-    public TaskEntity updateTask(Long id, TaskEntity taskEntity) {
+    public TaskEntity updateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException {
         TaskEntity existingTask = taskEntityRepository.findById(id).orElseThrow(
                 () -> new TaskNotFoundException("Task not found")
         );
@@ -50,6 +50,11 @@ public class TaskEntityServiceImpl implements TaskEntityService {
 
     @Override
     public void createNewTaskEntity(NewTaskEntityDTO newTaskEntityDTO) {
+        validateTask(newTaskEntityDTO);
+        TaskEntity taskEntity = new TaskEntity(newTaskEntityDTO.title(),
+                                                newTaskEntityDTO.description(),
+                                                newTaskEntityDTO.status());
+        saveTask(taskEntity);
     }
 
     public void validateTask(NewTaskEntityDTO newTaskEntityDTO) {
