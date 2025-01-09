@@ -16,8 +16,4 @@ public class TaskEntityController {
     @Autowired
     private TaskEntityRepository taskEntityRepository;
 
-    @GetMapping("/{status}")
-    public List<TaskEntity> getTasksByStatus(@PathVariable TaskEntity.TaskStatus status) {
-        return taskEntityRepository.findByStatus(status);
-    }
 }
