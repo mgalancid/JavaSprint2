@@ -15,20 +15,4 @@ public class UserEntityController {
     @Autowired
     private UserEntityRepository userEntityRepository;
 
-    @GetMapping("/{id}")
-    public UserEntity getUserById(@PathVariable Long id) {
-        return userEntityRepository.findById(id).orElse(null);
-    }
-
-    @GetMapping("/{username}")
-    public ResponseEntity<Boolean> checkIfUsernameExist(@PathVariable String username) {
-        boolean usernameExists = userEntityRepository.existsByUser(username);
-        return ResponseEntity.ok(usernameExists);
-    }
-
-    @GetMapping("/{email}")
-    public ResponseEntity<Boolean> checkIfEmailExist(@PathVariable String email) {
-        boolean emailExists = userEntityRepository.existByEmail(email);
-        return ResponseEntity.ok(emailExists);
-    }
 }
