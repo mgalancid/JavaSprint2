@@ -7,17 +7,17 @@ public class TaskEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private TaskStatus status;
     private String title, description;
+    private TaskStatus status;
 
     public TaskEntity() {
 
     }
 
-    public TaskEntity(TaskStatus status, String title, String description) {
-        this.status = status;
+    public TaskEntity(String title,  String description, TaskStatus status) {
         this.title = title;
         this.description = description;
+        this.status = status;
     }
 
     @ManyToOne

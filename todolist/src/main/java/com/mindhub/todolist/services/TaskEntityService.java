@@ -8,7 +8,7 @@ import com.mindhub.todolist.models.TaskEntity;
 public interface TaskEntityService {
     TaskEntityDTO getTaskDTOById(Long id) throws TaskNotFoundException;
     TaskEntity getTaskById(Long id) throws TaskNotFoundException;
-    TaskEntity updateTask(Long id, TaskEntity taskEntity); // PUT
+    TaskEntity updateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException; // PUT
     void saveTask(TaskEntity taskEntity);
     void deleteTask(Long id); // DELETE
     void createNewTaskEntity (NewTaskEntityDTO newTaskEntityDTO);
