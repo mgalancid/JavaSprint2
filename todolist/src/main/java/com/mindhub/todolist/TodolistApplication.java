@@ -1,6 +1,5 @@
 package com.mindhub.todolist;
 
-import com.mindhub.todolist.dtos.UserEntityDTO;
 import com.mindhub.todolist.models.TaskEntity;
 import com.mindhub.todolist.models.UserEntity;
 import com.mindhub.todolist.repositories.TaskEntityRepository;
@@ -9,7 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.config.Task;
 
 @SpringBootApplication
 public class TodolistApplication {
@@ -19,7 +17,8 @@ public class TodolistApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(UserEntityRepository userEntityRepository) {
+	public CommandLineRunner initData(UserEntityRepository userEntityRepository,
+									  TaskEntityRepository taskEntityRepository) {
 		return args -> {
 			UserEntity userEntity = new UserEntity("John Doe",
 													"12345678",
@@ -39,15 +38,16 @@ public class TodolistApplication {
 			TaskEntity taskEntity = new TaskEntity("Task 1",
 													"description",
 													TaskEntity.TaskStatus.IN_PROCESS);
-			userEntityRepository.save(userEntity1);
+			taskEntityRepository.save(taskEntity);
 			TaskEntity taskEntity1 = new TaskEntity("Task 2",
-					"description",
-					TaskEntity.TaskStatus.PENDING);
+													"description",
+													TaskEntity.TaskStatus.PENDING);
 
+			taskEntityRepository.save(taskEntity1);
 			TaskEntity taskEntity2 = new TaskEntity("Task 3",
-					"description",
-					TaskEntity.TaskStatus.COMPLETED);
-			userEntityRepository.save(userEntity2);
+													"description",
+													TaskEntity.TaskStatus.COMPLETED);
+			taskEntityRepository.save(taskEntity2);
 		};
 	}
 }
