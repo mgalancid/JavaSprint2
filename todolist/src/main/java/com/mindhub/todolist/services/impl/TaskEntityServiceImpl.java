@@ -9,6 +9,8 @@ import com.mindhub.todolist.services.TaskEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TaskEntityServiceImpl implements TaskEntityService {
 
@@ -25,6 +27,11 @@ public class TaskEntityServiceImpl implements TaskEntityService {
         return taskEntityRepository.findById(id).orElseThrow(
                 () -> new TaskNotFoundException("Task not found")
         );
+    }
+
+    @Override
+    public List<TaskEntity> getAllTasks() {
+        return taskEntityRepository.findAll();
     }
 
     @Override

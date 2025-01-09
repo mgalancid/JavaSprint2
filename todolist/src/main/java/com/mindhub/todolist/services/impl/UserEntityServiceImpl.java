@@ -9,6 +9,8 @@ import com.mindhub.todolist.services.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserEntityServiceImpl implements UserEntityService {
 
@@ -25,6 +27,11 @@ public class UserEntityServiceImpl implements UserEntityService {
         return userEntityRepository.findById(id).orElseThrow(
                 () -> new UserNotFoundException("User not found")
         );
+    }
+
+    @Override
+    public List<UserEntity> getAllUsers() {
+        return userEntityRepository.findAll();
     }
 
     @Override
