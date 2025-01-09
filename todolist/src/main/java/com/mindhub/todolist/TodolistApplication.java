@@ -33,7 +33,7 @@ public class TodolistApplication {
 			UserEntity userEntity2 = new UserEntity("Bill Smith",
 													"24680135",
 													"billsmith@example.com");
-			userEntityRepository.save(userEntity1);
+			userEntityRepository.save(userEntity2);
 
 			TaskEntity taskEntity = new TaskEntity("Task 1",
 													"description",
