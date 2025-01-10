@@ -1,6 +1,6 @@
 package com.mindhub.todolist.services.impl;
 
-import com.mindhub.todolist.dtos.NewTaskEntityDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindhub.todolist.dtos.TaskEntityDTO;
 import com.mindhub.todolist.exceptions.TaskNotFoundException;
 import com.mindhub.todolist.models.TaskEntity;
@@ -10,61 +10,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskEntityServiceImpl implements TaskEntityService {
 
     @Autowired
-    private TaskEntityRepository taskEntityRepository;
+    private TaskEntityRepository taskRepository;
+    private ObjectMapper objectMapper;
 
+    public TaskEntityServiceImpl(TaskEntityRepository taskRepository,
+                                 ObjectMapper objectMapper) {
+        this.taskRepository = taskRepository;
+        this.objectMapper = objectMapper;
+    }
     @Override
     public TaskEntityDTO getTaskDTOById(Long id) throws TaskNotFoundException {
-        return new TaskEntityDTO(getTaskById(id));
-    }
-
-    @Override
-    public TaskEntity getTaskById(Long id) throws TaskNotFoundException {
-        return taskEntityRepository.findById(id).orElseThrow(
-                () -> new TaskNotFoundException("Task not found")
+        TaskEntity task = taskRepository.findById(id).orElseThrow(
+                () -> new TaskNotFoundException("Task not found with ID: " + id)
         );
+        return objectMapper.convertValue(task, TaskEntityDTO.class);
     }
 
     @Override
-    public List<TaskEntity> getAllTasks() {
-        return taskEntityRepository.findAll();
+    public List<TaskEntityDTO> getAllTasksDTO() {
+        List<TaskEntity> task = taskRepository.findAll();
+        return task.stream()
+                    .map(
+                            taskEntity -> objectMapper.convertValue(taskEntity,
+                                                                                TaskEntityDTO.class)
+                    )
+                    .collect(Collectors.toList());
     }
 
     @Override
-    public TaskEntity updateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException {
-        TaskEntity existingTask = taskEntityRepository.findById(id).orElseThrow(
-                () -> new TaskNotFoundException("Task not found")
+    public TaskEntityDTO updateTask(Long id, TaskEntityDTO taskDetailsDTO) throws TaskNotFoundException {
+        TaskEntity existingTask = taskRepository.findById(id).orElseThrow(
+                () -> new TaskNotFoundException("Task not found with ID: " + id)
         );
-        existingTask.setTitle(taskEntity.getTitle());
-        existingTask.setDescription(taskEntity.getDescription());
-        existingTask.setStatus(taskEntity.getStatus());
-        return taskEntityRepository.save(existingTask);
+        existingTask.setTitle(taskDetailsDTO.getTitle());
+        existingTask.setDescription(taskDetailsDTO.getDescription());
+        existingTask.setStatus(taskDetailsDTO.getStatus());
+        TaskEntity updatedTask = taskRepository.save(existingTask);
+        return objectMapper.convertValue(existingTask, TaskEntityDTO.class);
     }
 
     @Override
-    public void saveTask(TaskEntity taskEntity) {
-        taskEntityRepository.save(taskEntity);
+    public TaskEntityDTO createNewTask(TaskEntityDTO taskEntityDTO) {
+        TaskEntity taskEntity = objectMapper.convertValue(taskEntityDTO, TaskEntity.class);
+        TaskEntity savedTask = taskRepository.save(taskEntity);
+        return objectMapper.convertValue(savedTask, TaskEntityDTO.class);
     }
 
     @Override
     public void deleteTask(Long id) {
-        taskEntityRepository.deleteById(id);
-    }
-
-    @Override
-    public void createNewTaskEntity(NewTaskEntityDTO newTaskEntityDTO) {
-        validateTask(newTaskEntityDTO);
-        TaskEntity taskEntity = new TaskEntity(newTaskEntityDTO.title(),
-                                                newTaskEntityDTO.description(),
-                                                newTaskEntityDTO.status());
-        saveTask(taskEntity);
-    }
-
-    public void validateTask(NewTaskEntityDTO newTaskEntityDTO) {
-
+        taskRepository.deleteById(id);
     }
 }

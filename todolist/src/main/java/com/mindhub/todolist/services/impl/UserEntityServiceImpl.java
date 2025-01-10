@@ -1,70 +1,65 @@
 package com.mindhub.todolist.services.impl;
 
-import com.mindhub.todolist.dtos.NewUserEntityDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindhub.todolist.dtos.UserEntityDTO;
 import com.mindhub.todolist.exceptions.UserNotFoundException;
 import com.mindhub.todolist.models.UserEntity;
 import com.mindhub.todolist.repositories.UserEntityRepository;
 import com.mindhub.todolist.services.UserEntityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserEntityServiceImpl implements UserEntityService {
+    private UserEntityRepository userRepository;
+    private ObjectMapper objectMapper;
 
-    @Autowired
-    private UserEntityRepository userEntityRepository;
+    public UserEntityServiceImpl(UserEntityRepository userRepository,
+                                 ObjectMapper objectMapper) {
+        this.userRepository = userRepository;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public UserEntityDTO getUserDTOById(Long id) throws UserNotFoundException {
-        return new UserEntityDTO(getUserById(id));
-    }
-
-    @Override
-    public UserEntity getUserById(Long id) throws UserNotFoundException {
-        return userEntityRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException("User not found")
+        UserEntity user = userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException("User not found with id: " + id)
         );
+        return objectMapper.convertValue(user, UserEntityDTO.class);
     }
 
     @Override
-    public List<UserEntity> getAllUsers() {
-        return userEntityRepository.findAll();
+    public List<UserEntityDTO> getAllUsersDTO() {
+        List<UserEntity> user = userRepository.findAll();
+        return user.stream()
+                            .map(
+                                    userEntity -> objectMapper.convertValue(userEntity,
+                                                                            UserEntityDTO.class)
+                            ).collect(Collectors.toList());
     }
 
     @Override
-    public UserEntity updateUser(Long id, UserEntity userEntity) throws UserNotFoundException {
-        UserEntity existingUser = userEntityRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException("User not found")
+    public UserEntityDTO updateUser(Long id, UserEntityDTO userDetailsDTO) throws UserNotFoundException {
+        UserEntity existingUser = userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException("User not found with id: " + id)
         );
-        existingUser.setUsername(userEntity.getUsername());
-        existingUser.setEmail(userEntity.getEmail());
-
-        return userEntityRepository.save(existingUser);
+        existingUser.setUsername(userDetailsDTO.getName());
+        existingUser.setEmail(userDetailsDTO.getEmail());
+        UserEntity updatedUser = userRepository.save(existingUser);
+        return objectMapper.convertValue(existingUser, UserEntityDTO.class);
     }
 
     @Override
-    public void saveUser(UserEntity userEntity) {
-        userEntityRepository.save(userEntity);
+    public UserEntityDTO createNewUser(UserEntityDTO userDTO) {
+        UserEntity userEntity = objectMapper.convertValue(userDTO, UserEntity.class);
+        UserEntity savedUser = userRepository.save(userEntity);
+        return objectMapper.convertValue(savedUser, UserEntityDTO.class);
     }
 
     @Override
-    public void deleteUser(long id) {
-        userEntityRepository.deleteById(id);
-    }
-
-    @Override
-    public void createNewUserEntity(NewUserEntityDTO newUserEntityDTO) {
-        validatePerson(newUserEntityDTO);
-        UserEntity userEntity = new UserEntity(newUserEntityDTO.name(),
-                                                newUserEntityDTO.password(),
-                                                newUserEntityDTO.email());
-        saveUser(userEntity);
-    }
-
-    public void validatePerson(NewUserEntityDTO newUserEntityDTO){
-
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }

@@ -33,4 +33,8 @@ public class UserEntityDTO {
     public String getEmail(){
         return email;
     }
+
+    public List<TaskEntityDTO> getTasks( ){
+        return tasks;
+    }
 }
