@@ -3,6 +3,7 @@ package com.mindhub.todolist.services.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindhub.todolist.dtos.UserEntityDTO;
 import com.mindhub.todolist.exceptions.UserNotFoundException;
+import com.mindhub.todolist.models.TaskEntity;
 import com.mindhub.todolist.models.UserEntity;
 import com.mindhub.todolist.repositories.UserEntityRepository;
 import com.mindhub.todolist.services.UserEntityService;
@@ -61,5 +62,21 @@ public class UserEntityServiceImpl implements UserEntityService {
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public List<UserEntity> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public List<UserEntity> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public boolean isEmailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean isUsernameExists(String username) {
+        return userRepository.existsByUsername(username);
     }
 }
