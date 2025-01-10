@@ -56,7 +56,7 @@ public class TaskEntityController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "The data to be uploaded.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserEntityDTO.class))))
+                            schema = @Schema(implementation = TaskEntityDTO.class))))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task successfully uploaded."),
             @ApiResponse(responseCode = "400", description = "Bad request, invalid data.")
@@ -71,7 +71,7 @@ public class TaskEntityController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "The data to be created",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserEntityDTO.class))))
+                            schema = @Schema(implementation = TaskEntityDTO.class))))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Task successfully created."),
             @ApiResponse(responseCode = "400", description = "Bad request, invalid data."),

@@ -67,11 +67,12 @@ public class TaskEntity {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "TaskEntity{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", task status='" + status.toString() + '\'' +
+                ", status='" + status + '\'' +
+                ", userId=" + (userEntity != null ? userEntity.getId() : "null") +
                 '}';
     }
 }
