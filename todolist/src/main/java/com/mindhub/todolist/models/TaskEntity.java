@@ -21,7 +21,7 @@ public class TaskEntity {
     }
 
     @ManyToOne
-    private UserEntity user;
+    private UserEntity userEntity;
 
     public Long getId() {
         return id;
@@ -51,17 +51,27 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public enum TaskStatus {
         PENDING,
         IN_PROCESS,
         COMPLETED,
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", task status='" + status.toString() + '\'' +
+                '}';
     }
 }

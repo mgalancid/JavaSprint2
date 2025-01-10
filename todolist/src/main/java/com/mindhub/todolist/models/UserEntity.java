@@ -24,8 +24,8 @@ public class UserEntity {
         this.email = email;
     }
 
-    @OneToMany(mappedBy = "user")
-    private Set<TaskEntity> task = new HashSet<>();
+    @OneToMany(mappedBy = "userEntity")
+    private Set<TaskEntity> tasks = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -56,11 +56,16 @@ public class UserEntity {
     }
 
     public Set<TaskEntity> getTask() {
-        return task;
+        return tasks;
     }
 
     public void setTask(Set<TaskEntity> task) {
-        this.task = task;
+        this.tasks = task;
+    }
+
+    public void addTask(TaskEntity task) {
+        task.setUserEntity(this);
+        this.tasks.add(task);
     }
 
     @Override

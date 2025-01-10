@@ -26,28 +26,12 @@ public class TodolistApplication {
 			userEntityRepository.save(userEntity);
 			System.out.println(userEntity);
 
-			UserEntity userEntity1 = new UserEntity("Jane Doe",
-													"87654321",
-													"janedoe@example.com");
-			userEntityRepository.save(userEntity1);
-			UserEntity userEntity2 = new UserEntity("Bill Smith",
-													"24680135",
-													"billsmith@example.com");
-			userEntityRepository.save(userEntity2);
-
 			TaskEntity taskEntity = new TaskEntity("Task 1",
-													"description",
+													"In Progress Task",
 													TaskEntity.TaskStatus.IN_PROCESS);
+			userEntity.addTask(taskEntity);
 			taskEntityRepository.save(taskEntity);
-			TaskEntity taskEntity1 = new TaskEntity("Task 2",
-													"description",
-													TaskEntity.TaskStatus.PENDING);
-
-			taskEntityRepository.save(taskEntity1);
-			TaskEntity taskEntity2 = new TaskEntity("Task 3",
-													"description",
-													TaskEntity.TaskStatus.COMPLETED);
-			taskEntityRepository.save(taskEntity2);
+			System.out.println(taskEntity);
 		};
 	}
 }
